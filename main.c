@@ -42,7 +42,7 @@ const char* get_file_contents( const char *path ) {
   return ret;
 }
 
-unsigned compiler_shader( char *filePath, GLenum shaderType ) {
+unsigned compile_shader( char *filePath, GLenum shaderType ) {
 
   unsigned shader = glCreateShader( shaderType );
   const char * const shaderStr = get_file_contents( filePath );
@@ -137,14 +137,6 @@ int main() {
    */
   glViewport( 0, TOOLBAR_H, INITIAL_WIN_W, INITIAL_WIN_H );
 
-  Uint32 lastUpdate = SDL_GetTicks();
-  double updateTimeLeft = 0;
-  Uint32 gameTicks = 0;
-  unsigned frames = 0;
-  Uint32 fpsStart = lastUpdate;
-
-  printf( "MS_PER_TICK: %f\n", MS_PER_TICK );
-
   // ----------------------------------------------------
 
   unsigned vao;
@@ -169,8 +161,8 @@ int main() {
   glBindBuffer( GL_ARRAY_BUFFER, vbo );
   glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
 
-  unsigned vertexShader = compiler_shader( "shader.vert", GL_VERTEX_SHADER );
-  unsigned fragShader = compiler_shader( "shader.frag", GL_FRAGMENT_SHADER );
+  unsigned vertexShader = compile_shader( "shader.vert", GL_VERTEX_SHADER );
+  unsigned fragShader = compile_shader( "shader.frag", GL_FRAGMENT_SHADER );
   unsigned shaders[] = { vertexShader, fragShader };
   unsigned shaderProgram = create_shader_program( shaders, 2 );
 
@@ -188,6 +180,14 @@ int main() {
   glUseProgram( shaderProgram );
 
   // ----------------------------------------------------
+
+  Uint32 lastUpdate = SDL_GetTicks();
+  double updateTimeLeft = 0;
+  Uint32 gameTicks = 0;
+  unsigned frames = 0;
+  Uint32 fpsStart = lastUpdate;
+
+  printf( "MS_PER_TICK: %f\n", MS_PER_TICK );
 
   while ( !quit ) {
 
